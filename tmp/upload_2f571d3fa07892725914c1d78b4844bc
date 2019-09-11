@@ -1,0 +1,20 @@
+<UdxDeclaration name="Ascii_Grid" description="Ascii Grid">
+    <UdxNode>
+	  <UdxNode name="proj" type="DTKT_STRING" description="projection information"/>
+       <UdxNode name="head" type="DTKT_ANY" description="head of this data">
+            <UdxNode name="ncols" type="DTKT_INT" description="columns count"/>
+            <UdxNode name="nrows" type="DTKT_INT" description="rows count"/>
+            <UdxNode name="xllcorner" type="DTKT_REAL" description="X offset"/>
+            <UdxNode name="NODATA_value" type="DTKT_REAL" description="y offset"/>
+            <UdxNode name="center_point" type="DTKT_VECTOR2D" description="point in center"/>
+            <UdxNode name="step" type="DTKT_INT | DTKT_ARRAY" description="step about something"/>
+        </UdxNode>
+		
+    </UdxNode>
+    <SemanticAttachment>
+        <Concepts/>
+        <SpatialRefs/>
+        <Units/>
+        <DataTemplates/>
+    </SemanticAttachment>
+</UdxDeclaration>

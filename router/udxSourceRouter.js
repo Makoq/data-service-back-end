@@ -16,14 +16,15 @@ exports.uploadUdxSource = function (req, res, next) {
 
   var form = new formidable.IncomingForm();
   form.uploadDir = __dirname + '/../tmp';    // 上传临时目录
+  console.log("path",__dirname + '/../tmp')
   form.parse(req, function (err, fields, files) {
     var id = uuid.v4();
     var basedir = __dirname + '/../upload/'; // 例如： xx/xxx/datamap/ 
 
     var file = files.file;
     var old_path = file.path;
-    
-     
+
+
 
     var new_path = basedir + file.name + "_" + id;
 
@@ -32,30 +33,34 @@ exports.uploadUdxSource = function (req, res, next) {
       fs.mkdirSync(new_path);
     }
 
+
     // 先解压到本地的，再保存到数据库
     //.pipe().unzip.Extract({ path: new_path })
 
     fs.createReadStream(old_path).on('data', function () {
-      
+
       var datetime = sd.format(new Date(), 'YYYY-MM-DD HH:mm');
-      
+
       // inset into db
-      db.insertOne("udx_source", {id:id,  name: fields.name, tags: fields.tags,describe: fields.desc, file: file.name, username: 'jin', datetime: datetime, share: '-1', delete: '-1' }, function (err3, result3) {
+      db.insertOne("udx_source", { id: id, name: fields.name, tags: fields.tags, describe: fields.desc, file: file.name, username: fields.username, uid: fields.uid, datetime: datetime, workspace: fields.workspace, workSpaceName: fields.workSpaceName, share: '-1', delete: '-1' }, function (err3, result3) {
         if (err3) {
           console.log(err3);
-          // res.send({
-          //   errno: -1,
-          //   msg: '保存数据库失败'
-          // });
           return;
         }
-        console.log("insert success",fields.name)
+        //同时在工作空间中增加
+        db.updateMany("workspace", { id: fields.workspace }, { $push: { filelist: id } }, function (err, result3) {
 
-
-        res.send({
-          errno: 0,
-          msg: 'ok'
-        });
+          if (err) {
+            console.log(err)
+          }
+          //TODO; 
+          //拷贝文件从一个目录到另一个目录,这里目录写死了*******************
+          fs.copyFileSync( old_path,"F:/udx/UdxServer/Server/upload/"+file.name + "_" + id+"/"+file.name+"_"+id);
+          res.send({
+            errno: 0,
+            msg: 'ok'
+          });
+        })
 
 
       });
@@ -89,11 +94,11 @@ exports.uploadUdxSource = function (req, res, next) {
 exports.udxSchemaInfo = function (req, res, next) {
 
   let id = req.query.id
-  let pageamount=parseInt(req.query.pageamount);
-  let page=parseInt(req.query.page)-1
+  let pageamount = parseInt(req.query.pageamount);
+  let page = parseInt(req.query.page) - 1
 
   // console.log(id)
-  db.find("udx_source",{id:id},{pageamount:pageamount,page:page},(err3, result3)=>{
+  db.find("udx_source", { id: id }, { pageamount: pageamount, page: page }, (err3, result3) => {
     if (err3) {
       console.log(err3);
       //查找失败
@@ -104,8 +109,24 @@ exports.udxSchemaInfo = function (req, res, next) {
       errno: 0,
       data: result3
     })
-    console.log('check udx schema info',id)
+    console.log('check udx schema info', id)
 
   })
+
+}
+
+
+exports.udxNode = function (req, res, next) {
+  let id=req.query.id
+  let fileName=req.query.fileName
+  fs.readFile("F:/udx/UdxServer/Server/upload/"+fileName+"_"+id, (err, data) => {
+    if (err) throw err;
+    console.log(data);
+
+    send({
+      errno: 0,
+      msg: 'ok'
+    })
+  });
 
 }

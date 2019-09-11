@@ -46,11 +46,16 @@ app.get('/deleteSource', router.deleteDataSource);
 //udx schema
 app.get('/udxSchemaInfo',router.udxSchemaInfo)
 
+//workspace
+app.post('/workspace',router.createWorkspace)
+app.get('/delworkspace',router.delworkspace)
+
+ 
 
 // udx source
 // 上传 udx source
 app.post("/udxSource", router.uploadUdxSource);
-
+app.get('/udxnode',router.udxNode)
 
 // 可视化
 app.get('/chart', router.getCharts); 

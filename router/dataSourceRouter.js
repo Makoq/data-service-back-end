@@ -12,11 +12,18 @@ exports.getDataSource = function (req, res, next) {
 
   // 每种数据源都对应一个collection。type表示collection的名字
   var collectionName = req.query.type;
-
+  let username=req.query.username;
+  let uid=req.query.uid;
+  if(collectionName==="udx_source"){
+    console.log("udx list")
+  }else{
+    console.log("work space list")
+  }
+  
   // 排序  "sort":{"name":1}
   //"$or": findConditioin, delete: isdelete
   //"pageamount": pageamount, "page": page, "sort": { "datetime": 1 }
-  db.find(collectionName, { username: 'jin' }, {}, function (err, result) {
+  db.find(collectionName, { username: username,uid:uid }, {}, function (err, result) {
     if (err) {
       console.log(err);
       res.send({ errno: -1, errmsg: '获取数据失败' });
@@ -30,14 +37,20 @@ exports.getDataSource = function (req, res, next) {
 exports.deleteDataSource = function (req, res, next) {
   var collectionName = req.query.type;
   var id = req.query.id;
+  let username=req.query.username
+  let uid =req.query.uid
+  let workspace =req.query.workspace
 
-  db.find(collectionName, { username: 'jin', id: id }, function (err2, result2) {
+  
+console.log("delete udx",id,collectionName)
+  db.find(collectionName, { username: username, id: id,uid:uid }, function (err2, result2) {
     if (err2) {
       console.log(err2);
       res.send({ errno: -1 });
       return;
     }
     var basedir = __dirname + '/../upload/';
+    
     var dir = result2[0].file + '_' + id;
     // 删除解压的文件夹
     file.deleteDir(basedir, dir, function (err3, data, stderr) {
@@ -47,7 +60,7 @@ exports.deleteDataSource = function (req, res, next) {
         return;
       }
       // 删除数据库
-      db.deleteMany(collectionName, { username: 'jin', id: id }, function (err, result) {
+      db.deleteMany(collectionName, { id: id }, function (err, result) {
 
         if (err) {
           console.log(err);
@@ -56,7 +69,19 @@ exports.deleteDataSource = function (req, res, next) {
         }
         //删除tmp文件夹中的临时文件
         // fs.unlink(files.files.path);
-        res.send({ errno: 0, errmsg: '删除成功' });
+
+
+              db.updateMany("workspace",{id:workspace},{$pull:{filelist:id}},function(err,result3){
+
+                if(err){
+                  console.log(err)
+                }
+                  //todo 拷贝文件
+                    res.send({ errno: 0, errmsg: '删除成功' });
+
+
+              })
+       
       });
     });
 
