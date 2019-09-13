@@ -6,6 +6,55 @@ var db = require("../model/db.js");
 var uuid = require('node-uuid');
 var sd = require('silly-datetime');
 
+var xml2js = require("xml2js");
+
+
+var basedir = __dirname + '/../upload/'; // 例如： xx/xxx/datamap/ 
+
+function copyDir(src, dist, callback) {
+
+  fs.access(dist, function (err) {
+    if (err) {
+      // 目录不存在时创建目录
+      fs.mkdirSync(dist);
+    }
+    _copy(null, src, dist);
+  });
+
+  function _copy(err, src, dist) {
+    if (err) {
+      callback(err);
+    } else {
+      fs.readdir(src, function (err, paths) {
+        if (err) {
+          callback(err)
+        } else {
+          paths.forEach(function (path) {
+            var _src = src + '/' + path;
+            var _dist = dist + '/' + path;
+            fs.stat(_src, function (err, stat) {
+              if (err) {
+                callback(err);
+              } else {
+                // 判断是文件还是目录
+                if (stat.isFile()) {
+                  fs.writeFileSync(_dist, fs.readFileSync(_src));
+                } else if (stat.isDirectory()) {
+                  // 当是目录是，递归复制
+                  copyDir(_src, _dist, callback)
+                }
+              }
+            })
+          })
+        }
+      })
+    }
+
+
+
+
+  }
+}
 exports.uploadUdxSource = function (req, res, next) {
   // var isLogin = req.session.islogin;
   // var username = req.session.username;
@@ -16,33 +65,30 @@ exports.uploadUdxSource = function (req, res, next) {
 
   var form = new formidable.IncomingForm();
   form.uploadDir = __dirname + '/../tmp';    // 上传临时目录
-  console.log("path",__dirname + '/../tmp')
+
   form.parse(req, function (err, fields, files) {
     var id = uuid.v4();
-    var basedir = __dirname + '/../upload/'; // 例如： xx/xxx/datamap/ 
-
-    var file = files.file;
-    var old_path = file.path;
 
 
+    let localPath = fields.localpath
 
-    var new_path = basedir + file.name + "_" + id;
 
-    // 新建文件夹，解压文件
-    if (!fs.existsSync(new_path)) {
-      fs.mkdirSync(new_path);
-    }
-
+    var new_path = basedir + "_" + id;
+    // console.log("localPath:",localPath)
+    // console.log("new pATH:",new_path)
 
     // 先解压到本地的，再保存到数据库
     //.pipe().unzip.Extract({ path: new_path })
+    copyDir(localPath, new_path, function (err) {
+      if (err) {
+        console.log(err);
+      }
 
-    fs.createReadStream(old_path).on('data', function () {
 
-      var datetime = sd.format(new Date(), 'YYYY-MM-DD HH:mm');
-
-      // inset into db
-      db.insertOne("udx_source", { id: id, name: fields.name, tags: fields.tags, describe: fields.desc, file: file.name, username: fields.username, uid: fields.uid, datetime: datetime, workspace: fields.workspace, workSpaceName: fields.workSpaceName, share: '-1', delete: '-1' }, function (err3, result3) {
+    })
+    var datetime = sd.format(new Date(), 'YYYY-MM-DD HH:mm');
+    db.insertOne("udx_source", { id: id, name: fields.name, tags: fields.tags, describe: fields.desc, username: fields.username, uid: fields.uid, datetime: datetime, workspace: fields.workspace, workSpaceName: fields.workSpaceName, localPath: fields.localpath, share: '-1', delete: '-1' }
+      , function (err3, result3) {
         if (err3) {
           console.log(err3);
           return;
@@ -55,37 +101,44 @@ exports.uploadUdxSource = function (req, res, next) {
           }
           //TODO; 
           //拷贝文件从一个目录到另一个目录,这里目录写死了*******************
-          fs.copyFileSync( old_path,"F:/udx/UdxServer/Server/upload/"+file.name + "_" + id+"/"+file.name+"_"+id);
+          // fs.copyFileSync( localPath,new_path);
           res.send({
             errno: 0,
             msg: 'ok'
           });
         })
 
-
       });
 
-      // res.send({
-      //   errno: 0,
-      //   msg: 'ok'
-      // });
+    // fs.createReadStream("F:/udx/UdxServer/Server/tmp/testschema").on('data', function () {
 
-    });
+    //   var datetime = sd.format(new Date(), 'YYYY-MM-DD HH:mm');
+
+    //   // inset into db
+    //   db.insertOne("udx_source", { id: id, name: fields.name, tags: fields.tags, describe: fields.desc, username: fields.username, uid: fields.uid, datetime: datetime, workspace: fields.workspace, workSpaceName: fields.workSpaceName,localPath:fields.localPath, share: '-1', delete: '-1' }, function (err3, result3) {
+    //     if (err3) {
+    //       console.log(err3);
+    //       return;
+    //     }
+    //     //同时在工作空间中增加
+    //     db.updateMany("workspace", { id: fields.workspace }, { $push: { filelist: id } }, function (err, result3) {
+
+    //       if (err) {
+    //         console.log(err)
+    //       }
+    //       //TODO; 
+    //       //拷贝文件从一个目录到另一个目录,这里目录写死了*******************
+    //       fs.copyFileSync( localPath,new_path);
+    //       res.send({
+    //         errno: 0,
+    //         msg: 'ok'
+    //       });
+    //     })
 
 
-
-    // fs.rename(old_path, new_path, function (err2) {
-    //   if (err2) {
-    //     console.log(err2);
-    //     res.send({
-    //       errno: 1,
-    //       msg: '服务器端保存文件失败'
-    //     });
-    //     return;
-    //   }
-
-    //   iterator(index + 1);
+    //   });
     // });
+
 
 
   });
@@ -117,16 +170,60 @@ exports.udxSchemaInfo = function (req, res, next) {
 
 
 exports.udxNode = function (req, res, next) {
-  let id=req.query.id
-  let fileName=req.query.fileName
-  fs.readFile("F:/udx/UdxServer/Server/upload/"+fileName+"_"+id, (err, data) => {
-    if (err) throw err;
-    console.log(data);
 
-    send({
-      errno: 0,
-      msg: 'ok'
-    })
-  });
+
+
+  let id = req.query.id
+
+
+  let new_path = basedir + "_" + id;
+
+  console.log("get node",id)
+
+  //读取配置文件
+  let configFile = '';
+  try {
+    configFile = fs.readFileSync(new_path + "/config.json", 'utf-8');
+  } catch (e) {
+    console.log('read cfg.json error: ' + e);
+    res.send('-1');
+    return;
+  }
+  let schemaArray=(JSON.parse(configFile)).schema
+
+  let schemaResult=[]
+
+  
+  //读取udx
+  for(let i=0;i<schemaArray.length;i++){
+        let schemaFile;
+        try {
+          schemaFile = fs.readFileSync(new_path + "/"+schemaArray[i], 'utf-8');
+        } catch (e) {
+          console.log('read cfg.json error: ' + e);
+          res.send('-1');
+          return;
+        }
+        
+        let resultJson;
+        xml2js.parseString(schemaFile, {
+          explicitArray: false,
+        }, function (err, result) {
+          resultJson = JSON.parse(JSON.stringify(result));
+          schemaResult.push(resultJson)
+          // console.log(resultJson)
+        });
+  }
+  
+  res.send({
+    errno: 0,
+    data:schemaResult
+  })
+   
+  // console.log(configFile.schema)
+
+
+
+
 
 }

@@ -51,7 +51,7 @@ console.log("delete udx",id,collectionName)
     }
     var basedir = __dirname + '/../upload/';
     
-    var dir = result2[0].file + '_' + id;
+    var dir =  '_' + id;
     // 删除解压的文件夹
     file.deleteDir(basedir, dir, function (err3, data, stderr) {
       if (err3) {
