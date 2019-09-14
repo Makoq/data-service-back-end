@@ -1,3 +1,1 @@
-udxSourceRouter-
-    uploadUdxSource
-    udxNode
+ 

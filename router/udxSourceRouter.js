@@ -190,6 +190,8 @@ exports.udxNode = function (req, res, next) {
     return;
   }
   let schemaArray=(JSON.parse(configFile)).schema
+  let schemaDataArray=(JSON.parse(configFile)).data
+
 
   let schemaResult=[]
 
@@ -217,7 +219,11 @@ exports.udxNode = function (req, res, next) {
   
   res.send({
     errno: 0,
-    data:schemaResult
+    data:{
+
+      schema:schemaResult,
+      udx_data:schemaDataArray
+    } 
   })
    
   // console.log(configFile.schema)
