@@ -11,6 +11,7 @@ var xml2js = require("xml2js");
 
 var basedir = __dirname + '/../upload/'; // 例如： xx/xxx/datamap/ 
 
+//递归拷贝文件
 function copyDir(src, dist, callback) {
 
   fs.access(dist, function (err) {
@@ -168,7 +169,6 @@ exports.udxSchemaInfo = function (req, res, next) {
 
 }
 
-
 exports.udxNode = function (req, res, next) {
 
 
@@ -227,6 +227,107 @@ exports.udxNode = function (req, res, next) {
   })
    
   // console.log(configFile.schema)
+
+
+
+
+
+}
+
+exports.soloudxschema=function(req,res,next){
+  let id=req.query.id
+
+  db.find('udx_source',{id:id},function(err,result3){
+    if(err){
+      console.log(err)
+    }
+
+    res.send({
+      errno:0,
+      data:result3
+    })
+  })
+
+
+
+
+}
+
+exports.updateschema=function(req,res,next){
+
+  var form = new formidable.IncomingForm();
+  form.parse(req, function (err, fields, files) {
+      if(err){
+          console.log(err)
+      }
+    var datetime = sd.format(new Date(), 'YYYY-MM-DD HH:mm');
+    console.log("wksp",fields.workspace)
+    db.find('workspace',{id:fields.workspace},function(err1,result3){
+      if(err1){
+        console.log(err1)
+      }
+    
+
+      
+      if(result3[0].id===fields.originalWS){
+        //当不切换工作空间时
+        db.updateMany('udx_source',{id:fields.id},{$set:{name:fields.name,tags:fields.tags,describe:fields.desc,datetime:datetime,localPath:fields.localpath}},function(err2,result3){
+          if(err2){
+            console.log(err2)
+          }
+          console.log("update udx schema",fields.id)
+          res.send(
+            { errno: 0, 
+              msg:'ok'
+            }
+          );
+
+        })
+
+      }else{//当切换工作空间时
+        db.updateMany('workspace',{id:fields.originalWS},{$pull:{filelist:fields.id}},function(err2,result1){
+          if(err2){
+            console.log(err2)
+          }
+          db.updateMany('workspace',{id:fields.workspace},{$push:{filelist:fields.id}},function(err3,result2){
+            if(err3){
+              console.log(err3)
+            }
+            db.updateMany('udx_source',{id:fields.id},{$set:{name:fields.name,tags:fields.tags,describe:fields.desc,datetime:datetime,localPath:fields.localpath,workSpaceName:fields.workSpaceName,workspace:fields.workspace}},function(err2,result3){
+              if(err2){
+                console.log(err2)
+              }
+              
+              console.log("update udx workspace schema ")
+              
+              res.send(
+                { errno: 0, 
+                  msg:'ok'
+                }
+              );
+    
+            })
+
+
+
+            
+           
+
+
+          })
+
+
+
+        })
+      }
+
+    })
+    // originalWS
+
+         
+
+
+  })
 
 
 

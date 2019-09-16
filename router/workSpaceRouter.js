@@ -18,7 +18,16 @@ exports.createWorkspace=function(req, res, next){
 
             let id = uuid.v4();
             var datetime = sd.format(new Date(), 'YYYY-MM-DD HH:mm');
-            db.insertOne("workspace", {id:id,  name: fields.name, tags: fields.tags,describe: fields.desc, username: fields.username,uid: fields.uid, datetime: datetime,filelist:[] }, function (err3, result3) {
+            db.find("workspace",{name:fields.name},function(err,result2){
+              console.log(result2)
+              if(result2.length>0){
+                console.log("workspace already exist")
+                res.send({
+                  errno:1,
+                  data:'workspace already exist!'
+                })
+              }else{
+                db.insertOne("workspace", {id:id,  name: fields.name, tags: fields.tags,describe: fields.desc, username: fields.username,uid: fields.uid, datetime: datetime,filelist:[] }, function (err3, result3) {
                 if (err3) {
                   console.log(err3);
                   // res.send({
@@ -32,11 +41,17 @@ exports.createWorkspace=function(req, res, next){
         
                 res.send({
                   errno: 0,
-                  msg: 'ok'
+                  data: 'create ok'
                 });
         
         
               });
+              }
+            })
+            
+
+
+            
         })
 
 
@@ -103,6 +118,66 @@ exports.delworkspace=function(req, res, next){
     })
     
 
+
+}
+
+exports.soloworkspace=function(req,res,next){
+
+  let id=req.query.id
+  db.find("workspace", { id: id }, function (err2, result2) {
+    if (err2) {
+      console.log(err2);
+      res.sen
+      d({ errno: -1 });
+      return;
+    }
+    console.log("check single workspace info",id)
+    res.send(
+      { errno: 0, 
+        data:result2
+      }
+    )
+  
+  })
+
+}
+
+exports.updateworkspace=function(req,res,next){
+
+   
+
+
+   
+  var form = new formidable.IncomingForm();
+  form.parse(req, function (err, fields, files) {
+      if(err){
+          console.log(err)
+      }
+    var datetime = sd.format(new Date(), 'YYYY-MM-DD HH:mm');
+
+     
+      db.updateMany('workspace',{id:fields.id},{$set:{name:fields.name,tags:fields.tags,describe:fields.desc,datetime:datetime}},function(err2,result3){
+        if(err2){
+          console.log(err2)
+        }
+        
+         
+          db.updateMany('udx_source',{workspace:fields.id},{$set:{workSpaceName:fields.name}},function(err,result2){
+              if(err){
+                console.log(err)
+              }
+              console.log("edit work space",fields.id)
+
+               res.send(
+                { errno: 0, 
+                  msg:'ok'
+                }
+              )
+          })
+      })
+
+
+  })
 
 }
 

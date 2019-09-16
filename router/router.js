@@ -10,10 +10,16 @@ exports.action = user.action;
 // udxSource
 exports.uploadUdxSource = udxSource.uploadUdxSource;
 exports.udxSchemaInfo=udxSource.udxSchemaInfo;
-exports.udxNode=udxSource.udxNode
+exports.udxNode=udxSource.udxNode;
+exports.soloudxschema=udxSource.soloudxschema;
+exports.updateschema=udxSource.updateschema;
+
+
 //workspace
 exports.createWorkspace=workspace.createWorkspace;
 exports.delworkspace=workspace.delworkspace;
+exports.soloworkspace=workspace.soloworkspace;
+exports.updateworkspace=workspace.updateworkspace;
 
 
 

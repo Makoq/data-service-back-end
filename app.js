@@ -43,12 +43,17 @@ app.post('/user/:action',router.action);
 // 获取数据源列表
 app.get('/dataSource', router.getDataSource);
 app.get('/deleteSource', router.deleteDataSource);
-//udx schema
+//udx schema  soloudxschema
 app.get('/udxSchemaInfo',router.udxSchemaInfo)
-
-//workspace
+app.get('/soloudxschema',router.soloudxschema)
+app.post('/updateschema',router.updateschema)
+ 
+//workspace soloworkspace
 app.post('/workspace',router.createWorkspace)
 app.get('/delworkspace',router.delworkspace)
+app.get('/soloworkspace',router.soloworkspace)
+app.post('/workspaceupdate',router.updateworkspace)
+
 
  
 
