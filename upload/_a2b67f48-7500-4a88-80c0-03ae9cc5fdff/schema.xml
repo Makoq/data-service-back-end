@@ -1,0 +1,13 @@
+<UdxDeclaration name="KwCsv" description="KW data">
+    <UdxNode>
+        <UdxNode name="DataList" type="DTKT_LIST" description="">
+            <UdxNode name="Point" type="DTKT_VECTOR3D" description=""/>
+        </UdxNode>
+    </UdxNode>
+    <SemanticAttachment>
+        <Concepts/>
+        <SpatialRefs/>
+        <Units/>
+        <DataTemplates/>
+    </SemanticAttachment>
+</UdxDeclaration>

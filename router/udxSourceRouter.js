@@ -6,7 +6,9 @@ var db = require("../model/db.js");
 var uuid = require('node-uuid');
 var sd = require('silly-datetime');
 
-var xml2js = require("xml2js");
+const { exec } = require('child_process');
+
+// var xml2js = require("xml2js");
 
 
 var basedir = __dirname + '/../upload/'; // 例如： xx/xxx/datamap/ 
@@ -195,38 +197,60 @@ exports.udxNode = function (req, res, next) {
 
   let schemaResult=[]
 
-  
+  let exe_dir= __dirname + '/../xml2js_cmd/'+'Xml2Json.exe'
+
   //读取udx
   for(let i=0;i<schemaArray.length;i++){
-        let schemaFile;
-        try {
-          schemaFile = fs.readFileSync(new_path + "/"+schemaArray[i], 'utf-8');
-        } catch (e) {
-          console.log('read cfg.json error: ' + e);
-          res.send('-1');
-          return;
-        }
+        let commond=exe_dir+" "+new_path + "/"+schemaArray[i]
+        exec(commond,(error,stdout,stderr)=>{
+          if(error){
+            console.log(error)
+          }
+          console.log(`stdout: ${stdout}`);
+          console.log(`stderr: ${stderr}`)
+
+          let json=(schemaArray[i].split("."))[0]+".json"
+          schemaResult.push(JSON.parse(fs.readFileSync(new_path + "/"+json, 'utf-8')));
+
+          res.send({
+            errno:0,
+            data:{
+               schema:schemaResult,
+              udx_data:schemaDataArray
+            }
+           
+          })
+
+
+        })
+        // let schemaFile;
+        // try {
+        //   schemaFile = fs.readFileSync(new_path + "/"+schemaArray[i], 'utf-8');
+        // } catch (e) {
+        //   console.log('read cfg.json error: ' + e);
+        //   res.send('-1');
+        //   return;
+        // }
         
-        let resultJson;
-        xml2js.parseString(schemaFile, {
-          explicitArray: false,
-        }, function (err, result) {
-          resultJson = JSON.parse(JSON.stringify(result));
-          schemaResult.push(resultJson)
-          // console.log(resultJson)
-        });
+        // let resultJson;
+        // xml2js.parseString(schemaFile, {
+        //   explicitArray: false,
+        // }, function (err, result) {
+        //   resultJson = JSON.parse(JSON.stringify(result));
+        //   schemaResult.push(resultJson)
+        //   // console.log(resultJson)
+        // });
   }
   
-  res.send({
-    errno: 0,
-    data:{
-
-      schema:schemaResult,
-      udx_data:schemaDataArray
-    } 
-  })
+      // res.send({
+      //   errno: 0,
+      //   data:{
+      //     schema:schemaResult,
+      //     udx_data:schemaDataArray
+      //   } 
+      // })
    
-  // console.log(configFile.schema)
+   
 
 
 
