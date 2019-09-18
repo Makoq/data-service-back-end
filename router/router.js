@@ -13,6 +13,9 @@ exports.udxSchemaInfo=udxSource.udxSchemaInfo;
 exports.udxNode=udxSource.udxNode;
 exports.soloudxschema=udxSource.soloudxschema;
 exports.updateschema=udxSource.updateschema;
+exports.config=udxSource.config;
+
+exports.test=udxSource.test;
 
 
 //workspace

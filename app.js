@@ -13,6 +13,8 @@ app.use(session({
 }));
 
 
+
+
 //http://www.freesion.com/article/348313475/
 // 设置跨域
 // app.all('*', (req, res, next) => {
@@ -61,6 +63,10 @@ app.post('/workspaceupdate',router.updateworkspace)
 // 上传 udx source
 app.post("/udxSource", router.uploadUdxSource);
 app.get('/udxnode',router.udxNode)
+app.get('/config',router.config)
+app.get('/test',router.test)
+
+
 
 // 可视化
 app.get('/chart', router.getCharts); 
