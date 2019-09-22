@@ -14,6 +14,9 @@ exports.udxNode=udxSource.udxNode;
 exports.soloudxschema=udxSource.soloudxschema;
 exports.updateschema=udxSource.updateschema;
 exports.config=udxSource.config;
+exports.schemaDataXml=udxSource.schemaDataXml;
+exports.newBlockLog=udxSource.newBlockLog;
+exports.blockLog=udxSource.blockLog;
 
 exports.test=udxSource.test;
 

@@ -1,0 +1,20 @@
+{
+	"config":[
+		{
+			"schema":"schema1.xml",
+			"data":[
+				"ascii_test11.xml","ascii_test12.xml"
+			]
+		},
+		{
+			"schema":"schema2.xml",
+			"data":[
+				"ascii_schema2.xml" 
+			]
+		}
+		
+		
+		
+	]
+		
+}

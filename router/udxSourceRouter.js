@@ -169,8 +169,33 @@ exports.udxSchemaInfo = function (req, res, next) {
   })
 
 }
-//for test
-exports.test=function(req,res,next){
+
+exports.schemaDataXml=function(req,res,next){
+  let id=req.query.id
+  let schemaData=req.query.schemaData
+
+  let new_path = basedir + "_" + id;
+
+  console.log("get schema data:",schemaData)
+
+  
+   
+  //读取udx
+  let schemaFile;
+  try {
+    schemaFile = fs.readFileSync(new_path + "/"+schemaData, 'utf-8');
+  } catch (e) {
+    console.log('read cfg.json error: ' + e);
+    res.send('-1');
+    return;
+  }
+
+  res.send({
+    errno: 0,
+    data:schemaFile
+  })
+
+
   console.log("test")
 }
 
@@ -243,7 +268,10 @@ exports.udxNode = function (req, res, next) {
 
       res.send({
         errno: 0,
-        data:resultJson
+        data:{
+          json:resultJson
+        
+        }
       })
    
    
@@ -353,8 +381,43 @@ exports.updateschema=function(req,res,next){
 
 
 }
+//for test
+exports.test=function(req,res,next){
+  console.log("test")
+}
+//insert new block log
+exports.newBlockLog=function(req,res,next){
 
-exports.defaultSchema=function(req,res,next){
+ // blocklog
+  let name=req.query.name
+  console.log(req.query.name)
+  var datetime = sd.format(new Date(), 'YYYY-MM-DD HH:mm');
+  let id= uuid.v4();
+  db.insertOne('blocklog',{id:id,name:name,time:datetime},function(err,result){
+    if(err){
+      console.log(err)
+    }
 
+    res.send({
+      errno:0,
+      data:'ok'
+    })
+  })
 
 }
+
+exports.blockLog=function(req,res,next){
+   let page=req.query.page
+
+   db.find('blocklog',{},{pageamount:10,page:page-1},function(err,result){
+      if(err){
+        console.log(err)
+      }
+
+      res.send({
+        errno:0,
+        data:result
+      })
+   })
+}
+

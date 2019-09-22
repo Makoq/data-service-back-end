@@ -64,6 +64,14 @@ app.post('/workspaceupdate',router.updateworkspace)
 app.post("/udxSource", router.uploadUdxSource);
 app.get('/udxnode',router.udxNode)
 app.get('/config',router.config)
+app.get('/schemadataxml',router.schemaDataXml)
+
+//配置block相关
+app.get('/newblocklog',router.newBlockLog)
+app.get('/blocklog',router.blockLog)
+
+
+//test
 app.get('/test',router.test)
 
 
