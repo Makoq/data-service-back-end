@@ -23,7 +23,7 @@ exports.createWorkspace=function(req, res, next){
               if(result2.length>0){
                 console.log("workspace already exist")
                 res.send({
-                  errno:1,
+                  errno:0,
                   data:'workspace already exist!'
                 })
               }else{

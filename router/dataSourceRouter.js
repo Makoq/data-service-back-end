@@ -2,6 +2,19 @@ var db = require("../model/db.js");
 var file = require('./file.js');
 
 // 从数据库获取数据源列表
+
+
+exports.getDataSourceCount=function(req,res,next){
+  var collectionName=req.query.type
+
+  db.getAllCount(collectionName,function(result){
+    res.send({
+      errno:0,
+      data:result
+    })
+  })
+
+}
 exports.getDataSource = function (req, res, next) {
   // var isLogin = req.session.islogin;
   // var username = req.session.username;
@@ -14,6 +27,10 @@ exports.getDataSource = function (req, res, next) {
   var collectionName = req.query.type;
   let username=req.query.username;
   let uid=req.query.uid;
+
+  let page=Number(req.query.page)-1
+  let pageSize=Number(req.query.pageSize)
+
   if(collectionName==="udx_source"){
     console.log("udx list")
   }else{
@@ -23,7 +40,7 @@ exports.getDataSource = function (req, res, next) {
   // 排序  "sort":{"name":1}
   //"$or": findConditioin, delete: isdelete
   //"pageamount": pageamount, "page": page, "sort": { "datetime": 1 }
-  db.find(collectionName, { username: username,uid:uid }, {}, function (err, result) {
+  db.find(collectionName, { username: username,uid:uid }, {pageamount:pageSize,page:page}, function (err, result) {
     if (err) {
       console.log(err);
       res.send({ errno: -1, errmsg: '获取数据失败' });

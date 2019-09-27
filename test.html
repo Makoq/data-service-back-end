@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>文档标题</title>
+<script src="../public/js/udx/udx.js"></script>
+
+<script src="../public/js/udx/udx_wrapper.js"></script>
+
+</head>
+<script>
+    function f(){
+    var data=new UdxDataset();
+    data.createDataset();
+
+    fetch('http://localhost:8897/schemadataxml?id=0480576f-8b63-47a9-8a32-056bc7c6ac91&schemaData=ascii_test11.xml')
+    .then(res=>res.json())
+    .then(re=>{
+        data.loadFromXmlStream(re.data)
+
+        var node=data.getSelf();
+
+        console.log(node)
+    })
+    }
+
+</script>
+<body>
+	<h1>我的第一个HTML页面</h1>
+	<p>我的第一个段落。</p>
+  <button onclick="f()">fetch</button>
+</body>
+</html>

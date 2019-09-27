@@ -68,82 +68,86 @@ exports.uploadUdxSource = function (req, res, next) {
   var form = new formidable.IncomingForm();
   form.uploadDir = __dirname + '/../data_dir';    // 上传临时目录
 
-  form.parse(req, function (err, fields, files) {
-    var id = uuid.v4();
+  
+    form.parse(req, function (err, fields, files) {
+      var id = uuid.v4();
 
 
-    let localPath = fields.localpath
+      let localPath = fields.localpath
 
 
-    var new_path = basedir + "_" + id;
-    // console.log("localPath:",localPath)
-    // console.log("new pATH:",new_path)
+      var new_path = basedir + "_" + id;
+      // console.log("localPath:",localPath)
+      // console.log("new pATH:",new_path)
 
-    // 先解压到本地的，再保存到数据库
-    //.pipe().unzip.Extract({ path: new_path })
-    copyDir(localPath, new_path, function (err) {
-      if (err) {
-        console.log(err);
-      }
-
-
-    })
-    var datetime = sd.format(new Date(), 'YYYY-MM-DD HH:mm');
-    db.insertOne("udx_source", { id: id, name: fields.name, tags: fields.tags, describe: fields.desc, username: fields.username, uid: fields.uid, datetime: datetime, workspace: fields.workspace, workSpaceName: fields.workSpaceName, localPath: fields.localpath, share: '-1', delete: '-1' }
-      , function (err3, result3) {
-        if (err3) {
-          console.log(err3);
-          return;
+      // 先解压到本地的，再保存到数据库
+      //.pipe().unzip.Extract({ path: new_path })
+      copyDir(localPath, new_path, function (err) {
+        if (err) {
+          console.log(err);
         }
-        //同时在工作空间中增加
-        db.updateMany("workspace", { id: fields.workspace }, { $push: { filelist: id } }, function (err, result3) {
 
-          if (err) {
-            console.log(err)
+
+      })
+      var datetime = sd.format(new Date(), 'YYYY-MM-DD HH:mm');
+
+      db.insertOne("udx_source", { id: id, name: fields.name, tags: fields.tags, describe: fields.desc, username: fields.username, uid: fields.uid, datetime: datetime, workspace: fields.workspace, workSpaceName: fields.workSpaceName, localPath: fields.localpath, share: '-1', delete: '-1' }
+        , function (err3, result3) {
+          if (err3) {
+            console.log(err3);
+            return;
           }
-          //TODO; 
-          //拷贝文件从一个目录到另一个目录,这里目录写死了*******************
-          // fs.copyFileSync( localPath,new_path);
-          res.send({
-            errno: 0,
-            msg: 'ok'
-          });
-        })
+          //同时在工作空间中增加
+          db.updateMany("workspace", { id: fields.workspace }, { $push: { filelist: id } }, function (err, result3) {
 
-      });
+            if (err) {
+              console.log(err)
+            }
+            //TODO; 
+            //拷贝文件从一个目录到另一个目录,这里目录写死了*******************
+            // fs.copyFileSync( localPath,new_path);
+            res.send({
+              errno: 0,
+              msg: 'ok'
+            });
+          })
 
-    // fs.createReadStream("F:/udx/UdxServer/Server/tmp/testschema").on('data', function () {
+        });
 
-    //   var datetime = sd.format(new Date(), 'YYYY-MM-DD HH:mm');
+      // fs.createReadStream("F:/udx/UdxServer/Server/tmp/testschema").on('data', function () {
 
-    //   // inset into db
-    //   db.insertOne("udx_source", { id: id, name: fields.name, tags: fields.tags, describe: fields.desc, username: fields.username, uid: fields.uid, datetime: datetime, workspace: fields.workspace, workSpaceName: fields.workSpaceName,localPath:fields.localPath, share: '-1', delete: '-1' }, function (err3, result3) {
-    //     if (err3) {
-    //       console.log(err3);
-    //       return;
-    //     }
-    //     //同时在工作空间中增加
-    //     db.updateMany("workspace", { id: fields.workspace }, { $push: { filelist: id } }, function (err, result3) {
+      //   var datetime = sd.format(new Date(), 'YYYY-MM-DD HH:mm');
 
-    //       if (err) {
-    //         console.log(err)
-    //       }
-    //       //TODO; 
-    //       //拷贝文件从一个目录到另一个目录,这里目录写死了*******************
-    //       fs.copyFileSync( localPath,new_path);
-    //       res.send({
-    //         errno: 0,
-    //         msg: 'ok'
-    //       });
-    //     })
+      //   // inset into db
+      //   db.insertOne("udx_source", { id: id, name: fields.name, tags: fields.tags, describe: fields.desc, username: fields.username, uid: fields.uid, datetime: datetime, workspace: fields.workspace, workSpaceName: fields.workSpaceName,localPath:fields.localPath, share: '-1', delete: '-1' }, function (err3, result3) {
+      //     if (err3) {
+      //       console.log(err3);
+      //       return;
+      //     }
+      //     //同时在工作空间中增加
+      //     db.updateMany("workspace", { id: fields.workspace }, { $push: { filelist: id } }, function (err, result3) {
 
-
-    //   });
-    // });
+      //       if (err) {
+      //         console.log(err)
+      //       }
+      //       //TODO; 
+      //       //拷贝文件从一个目录到另一个目录,这里目录写死了*******************
+      //       fs.copyFileSync( localPath,new_path);
+      //       res.send({
+      //         errno: 0,
+      //         msg: 'ok'
+      //       });
+      //     })
 
 
+      //   });
+      // });
 
-  });
+
+
+    });
+
+
 }
 
 exports.udxSchemaInfo = function (req, res, next) {
@@ -408,8 +412,8 @@ exports.newBlockLog=function(req,res,next){
 
 exports.blockLog=function(req,res,next){
    let page=req.query.page
-
-   db.find('blocklog',{},{pageamount:10,page:page-1},function(err,result){
+  //  pageamount:10,page:page-1
+   db.find('blocklog',{},{},function(err,result){
       if(err){
         console.log(err)
       }

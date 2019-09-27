@@ -18,6 +18,9 @@ exports.schemaDataXml=udxSource.schemaDataXml;
 exports.newBlockLog=udxSource.newBlockLog;
 exports.blockLog=udxSource.blockLog;
 
+exports.getDataSourceCount=dataSource.getDataSourceCount;
+
+
 exports.test=udxSource.test;
 
 
