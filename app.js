@@ -52,7 +52,7 @@ app.get('/udxSchemaInfo',router.udxSchemaInfo)
 app.get('/soloudxschema',router.soloudxschema)
 app.post('/updateschema',router.updateschema)
  
-//workspace soloworkspace
+//workspace  soloworkspace
 app.post('/workspace',router.createWorkspace)
 app.get('/delworkspace',router.delworkspace)
 app.get('/soloworkspace',router.soloworkspace)

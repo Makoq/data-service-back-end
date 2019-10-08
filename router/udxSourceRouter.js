@@ -12,7 +12,7 @@ var xml2js = require("xml2js");
 
 var basedir = __dirname + '/../upload/'; // 例如： xx/xxx/datamap/ 
 
-//递归拷贝文件
+//递归拷贝文件相关
 function copyDir(src, dist, callback) {
 
   fs.access(dist, function (err) {
