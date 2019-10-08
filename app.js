@@ -47,7 +47,6 @@ app.get('/dataSource', router.getDataSource);
 app.get('/deleteSource', router.deleteDataSource);
 //getDataSourceCount
 app.get('/dataCount', router.getDataSourceCount);
-
 //udx schema  soloudxschema
 app.get('/udxSchemaInfo',router.udxSchemaInfo)
 app.get('/soloudxschema',router.soloudxschema)
