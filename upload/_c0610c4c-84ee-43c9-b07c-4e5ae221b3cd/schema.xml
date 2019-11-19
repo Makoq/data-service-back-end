@@ -1,0 +1,26 @@
+<UdxDeclaration>
+	<UdxNode>
+		<UdxNode name="date" kernelType="DTKT_STRING" desciption="date,e.g.,20140514" />
+		<UdxNode name="body" kernelType="DTKT_LIST" desciption="body">
+			<UdxNode name="city" kernelType="DTKT_NODE" desciption="city: 天津">
+				<UdxNode name="hour" kernelType="DTKT_NODE" desciption="hour: 0-23">
+					<UdxNode name="AQI" kernelType="DTKT_REAL" desciption="Air Quality Index" />
+					<UdxNode name="PM2.5" kernelType="DTKT_REAL" desciption="PM2.5:μg/m3" />
+					<UdxNode name="PM2.5_24h" kernelType="DTKT_REAL" desciption="PM2.5_24h:μg/m3" />
+					<UdxNode name="PM10" kernelType="DTKT_REAL" desciption="PM10:μg/m3" />
+					<UdxNode name="PM10_24h" kernelType="DTKT_REAL" desciption="PM10_24h:μg/m3" />
+					<UdxNode name="SO2" kernelType="DTKT_REAL" desciption="SO2:μg/m3" />
+					<UdxNode name="SO2_24h" kernelType="DTKT_REAL" desciption="SO2_24h:μg/m3" />
+					<UdxNode name="NO2" kernelType="DTKT_REAL" desciption="NO2:μg/m3" />
+					<UdxNode name="NO2_24h" kernelType="DTKT_REAL" desciption="NO2_24h:μg/m3" />
+					<UdxNode name="O3" kernelType="DTKT_REAL" desciption="O3:μg/m3" />
+					<UdxNode name="O3_24h" kernelType="DTKT_REAL" desciption="O3_24h:μg/m3" />
+					<UdxNode name="O3_8h" kernelType="DTKT_REAL" desciption="O3_8h:μg/m3" />
+					<UdxNode name="O3_8h_24h" kernelType="DTKT_REAL" desciption="O3_8h_24h:μg/m3" />
+					<UdxNode name="CO" kernelType="DTKT_REAL" desciption="CO:μg/m3" />
+					<UdxNode name="CO_24h" kernelType="DTKT_REAL" desciption="CO_24h:μg/m3" />
+				</UdxNode>
+			</UdxNode>
+		</UdxNode>
+	</UdxNode>
+</UdxDeclaration>

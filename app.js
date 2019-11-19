@@ -58,10 +58,12 @@ app.get('/delworkspace',router.delworkspace)
 app.get('/soloworkspace',router.soloworkspace)
 app.post('/workspaceupdate',router.updateworkspace)
 
+//data source detail
+app.get('/schemafile',router.dataDetail)
 
-
- 
-
+//screen background img
+app.post('/canvasimg',router.canvasImgUpload)
+app.get('/canimg/:id',router.canvasImgGet)
 // udx source
 // 上传 udx source
 app.post("/udxSource", router.uploadUdxSource);
@@ -76,8 +78,8 @@ app.get('/blocklog',router.blockLog)
 
 //test
 app.get('/test',router.test)
-
-
+app.get('/testChart',router.testChart)
+app.get('/chart/view/:id',router.viewChart)
 
 // 可视化
 app.get('/chart', router.getCharts); 

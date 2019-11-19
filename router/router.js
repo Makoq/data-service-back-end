@@ -22,8 +22,12 @@ exports.getDataSourceCount=dataSource.getDataSourceCount;
 
 
 exports.test=udxSource.test;
+//测试数据
+exports.testChart=udxSource.testChart;
 
-
+//canvas背景图片
+exports.canvasImgUpload=chart.canvasImgUpload;
+exports.canvasImgGet=chart.canvasImgGet;
 //workspace
 exports.createWorkspace=workspace.createWorkspace;
 exports.delworkspace=workspace.delworkspace;
@@ -36,6 +40,7 @@ exports.updateworkspace=workspace.updateworkspace;
 exports.getDataSource = dataSource.getDataSource;
 exports.deleteDataSource = dataSource.deleteDataSource;
 
+exports.dataDetail=udxSource.dataDetail;
 // 可视化
 exports.createChart = chart.createChart;
 exports.getCharts = chart.getCharts;
@@ -43,3 +48,5 @@ exports.getChart = chart.getChart;
 exports.deleteChart = chart.deleteChart;
 exports.updateChart = chart.updateChart;
 exports.copyChart = chart.copyChart;
+
+exports.viewChart = chart.viewChart;

@@ -1,0 +1,4 @@
+<DataProcessingMethod name="AQ data extracting" description="extract AQ data">
+    <Params type="in" name="input_date" description="input parameter"  schema="s1.xml" />
+    <Params type="out" name="output_udx" description="output AQ UDX data"  schema="s2.xml" />
+</DataProcessingMethod>

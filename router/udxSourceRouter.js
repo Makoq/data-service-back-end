@@ -247,7 +247,6 @@ exports.udxNode = function (req, res, next) {
   console.log("get node",id)
 
    
-  
    
   //读取udx
   let schemaFile;
@@ -268,8 +267,6 @@ exports.udxNode = function (req, res, next) {
     // console.log(resultJson)
   });    
   
-
-
       res.send({
         errno: 0,
         data:{
@@ -278,10 +275,6 @@ exports.udxNode = function (req, res, next) {
         }
       })
    
-   
-
-
-
 }
 
 
@@ -385,6 +378,43 @@ exports.updateschema=function(req,res,next){
 
 
 }
+
+//data source schema tree
+exports.dataDetail=function(req,res,next){
+  let id=req.query.id
+
+  let new_path = basedir + "_" + id;
+
+  //读取udx
+  let schemaFile;
+  try {
+    schemaFile = fs.readFileSync(new_path + "/schema.xml", 'utf-8');
+  } catch (e) {
+    console.log('read cfg.json error: ' + e);
+    res.send('-1');
+    return;
+  }
+  
+  let resultJson;
+  xml2js.parseString(schemaFile, {
+    explicitArray: false,
+  }, function (err, result) {
+    resultJson = JSON.parse(JSON.stringify(result));
+     
+    // console.log(resultJson)
+  });    
+  
+      res.send({
+        errno: 0,
+        data: resultJson
+      })
+
+
+
+  
+}
+
+
 //for test
 exports.test=function(req,res,next){
   console.log("test")
@@ -425,3 +455,32 @@ exports.blockLog=function(req,res,next){
    })
 }
 
+exports.testChart=function(req,res,next){
+var basedir = __dirname + '/../data_dir/'; // 例如： xx/xxx/datamap/ 
+  let file_path=req.query.file
+  let new_path = basedir + "/"+file_path;
+    //读取udx
+  let schemaFile;
+  try {
+    schemaFile = fs.readFileSync(new_path + "/data.xml", 'utf-8');
+  } catch (e) {
+    console.log('read cfg.json error: ' + e);
+    res.send('-1');
+    return;
+  }
+  
+  // let resultJson;
+  // xml2js.parseString(schemaFile, {
+  //   explicitArray: false,
+  // }, function (err, result) {
+  //   resultJson = JSON.parse(JSON.stringify(result));
+     
+  //   // console.log(resultJson)
+  // });    
+  
+      res.send({
+        errno: 0,
+        data: schemaFile
+      })
+
+}

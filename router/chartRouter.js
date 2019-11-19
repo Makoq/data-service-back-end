@@ -3,6 +3,7 @@ var db = require("../model/db.js");
 var uuid = require('node-uuid');
 var sd = require('silly-datetime');
 var ObjectID = require('mongodb').ObjectID;//数据库ObjectId
+var fs = require('fs');
 
 exports.createChart = function (req, res, next) {
   var form = new formidable.IncomingForm();
@@ -160,4 +161,64 @@ exports.copyChart = function (req, res, next) {
 
   });
 
+}
+
+exports.viewChart=function(req,res,next){
+  let id=req.params.id
+  db.find("chart", { id: id }, { pageamount: 1, page: 0 }, (err3, result3) => {
+    if (err3) {
+      console.log(err3);
+      //查找失败
+      return;
+    }
+
+    res.send({
+      errno: 0,
+      data: result3[0]
+    })
+    console.log('check udx schema info', id)
+
+  })
+}
+
+//背景图片上传
+
+exports.canvasImgUpload=function(req,res,next){
+  var img_id=uuid.v4()
+  let path=__dirname+'/../upload_bak_img/'
+
+  var form = new formidable.IncomingForm();
+  form.encoding = 'utf-8' // 编码
+  form.keepExtensions = true // 保留扩展名
+  form.uploadDir=path
+  form.parse(req, (err, fields, files) => {
+    if(err) return next(err)
+    // console.log(fields) //Object 表单数据
+    console.log(files.file.path)
+    // console.log(file.File.path) //上传文件用files.<name>访问
+    db.insertOne('bak_img',{id:img_id,path:files.file.path},function(err,result){
+      if(err){
+        console.log(err)
+        return;
+      }
+      res.json({ code: 1, id: img_id })
+    })
+
+    
+  })
+}
+
+exports.canvasImgGet=function(req,res,next){
+  let id=req.params.id
+  db.find('bak_img',{id:id},function(err,result){
+    // console.log("giao",result)
+    try{
+      var img_file=fs.readFileSync(result[0].path)
+    }catch(err){
+      console.log(err)
+    }
+
+    res.send(img_file)
+
+  })
 }

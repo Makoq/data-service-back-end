@@ -1,0 +1,5 @@
+<UdxDeclaration name="input_time" description="input time">
+	<UdxNode>
+		<UdxNode name="time" type="DTKT_STRING" description="input time" />
+	</UdxNode>
+</UdxDeclaration>
