@@ -3,5 +3,7 @@
  */
 module.exports = {
     dburl: "mongodb://223.2.45.52:27017/VgeConfigurableDataDB",
+    public_net_server:'http://localhost:8899/publicdata',
+    data_desc:'http://localhost:8899/datainfo'
 
 }

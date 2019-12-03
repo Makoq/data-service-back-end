@@ -75,6 +75,10 @@ app.get('/schemadataxml',router.schemaDataXml)
 app.get('/newblocklog',router.newBlockLog)
 app.get('/blocklog',router.blockLog)
 
+//发布数据
+app.post('/onlinedata/',router.publicData)
+app.post('/onlinedatainfo/',router.pulicDataInfo)
+
 
 //test
 app.get('/test',router.test)

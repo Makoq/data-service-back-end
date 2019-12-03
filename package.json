@@ -19,13 +19,15 @@
     "mongodb": "^2.2.25",
     "node-archiver": "^0.3.0",
     "node-expat": "^2.3.15",
+    "node-fetch": "^2.6.0",
     "node-uuid": "^1.4.8",
     "nodemailer": "^4.0.1",
     "nodemon": "^1.19.1",
-    "request": "^2.81.0",
+    "request": "^2.88.0",
     "silly-datetime": "^0.1.2",
     "supervisor": "^0.12.0",
     "unzip": "^0.1.11",
+    "uuid": "^3.3.3",
     "xml2js": "^0.4.17"
   }
 }

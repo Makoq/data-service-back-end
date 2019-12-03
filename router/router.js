@@ -4,6 +4,8 @@ var workspace = require('./workSpaceRouter');
 
 var dataSource = require('./dataSourceRouter');
 var chart = require('./chartRouter');
+
+const onlineData=require('./onlineData')
 //user
 exports.action = user.action;
 
@@ -50,3 +52,7 @@ exports.updateChart = chart.updateChart;
 exports.copyChart = chart.copyChart;
 
 exports.viewChart = chart.viewChart;
+
+//发布数据
+exports.publicData=onlineData.pulicData;
+exports.pulicDataInfo=onlineData.pulicDataInfo;

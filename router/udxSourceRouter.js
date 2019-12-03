@@ -8,7 +8,7 @@ var sd = require('silly-datetime');
 
 
 var xml2js = require("xml2js");
-
+var cp = require('child_process');
 
 var basedir = __dirname + '/../upload/'; // 例如： xx/xxx/datamap/ 
 
@@ -82,6 +82,7 @@ exports.uploadUdxSource = function (req, res, next) {
 
       // 先解压到本地的，再保存到数据库
       //.pipe().unzip.Extract({ path: new_path })
+      //拷贝文件
       copyDir(localPath, new_path, function (err) {
         if (err) {
           console.log(err);
@@ -91,7 +92,7 @@ exports.uploadUdxSource = function (req, res, next) {
       })
       var datetime = sd.format(new Date(), 'YYYY-MM-DD HH:mm');
 
-      db.insertOne("udx_source", { id: id, name: fields.name, tags: fields.tags, describe: fields.desc, username: fields.username, uid: fields.uid, datetime: datetime, workspace: fields.workspace, workSpaceName: fields.workSpaceName, localPath: fields.localpath, share: '-1', delete: '-1' }
+      db.insertOne("udx_source", { id: id, name: fields.name, img:fields.img,tags: fields.tags, describe: fields.desc, username: fields.username, uid: fields.uid, datetime: datetime, workspace: fields.workspace, workSpaceName: fields.workSpaceName, localPath: fields.localpath, share: '-1', delete: '-1' }
         , function (err3, result3) {
           if (err3) {
             console.log(err3);
@@ -315,7 +316,7 @@ exports.updateschema=function(req,res,next){
       
       if(result3[0].id===fields.originalWS){
         //当不切换工作空间时
-        db.updateMany('udx_source',{id:fields.id},{$set:{name:fields.name,tags:fields.tags,describe:fields.desc,datetime:datetime,localPath:fields.localpath}},function(err2,result3){
+        db.updateMany('udx_source',{id:fields.id},{$set:{name:fields.name,tags:fields.tags,img:fields.img,describe:fields.desc,datetime:datetime,localPath:fields.localpath}},function(err2,result3){
           if(err2){
             console.log(err2)
           }
@@ -417,7 +418,17 @@ exports.dataDetail=function(req,res,next){
 
 //for test
 exports.test=function(req,res,next){
+
   console.log("test")
+  console.log("process_id",__dirname,__filename)
+  // cp.exec('ipconfig',function(e,stdout,stderr){
+  //   if(!e){
+  //     console.log(stdout)
+  //   }
+  // });
+
+
+  res.send({code:"copy that"})
 }
 //insert new block log
 exports.newBlockLog=function(req,res,next){
