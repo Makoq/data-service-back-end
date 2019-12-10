@@ -14,7 +14,7 @@ exports.pulicData=function(req,res1,next){
  
     var form=new formidable.IncomingForm()
     form.parse(req,function(err,fields,file){
-        let url=fields.data+'/testUpload.zip'
+        let url=fields.data
         var target =  config.public_net_server;
 
         var rs = fs.createReadStream(url);
@@ -67,5 +67,37 @@ exports.pulicDataInfo=function(req,res1,next){
 
       });
     })
+
+}
+
+exports.filterLocalData=function(req,res,next){
+    let cont=req.query.words
+    let page=req.query.page-1
+    
+    let query={"name":new RegExp(cont)}
+     
+
+    db.find('udx_source',query,{},function(err,result){
+        console.log(query,result.length)
+         db.find('udx_source',query,{"pageamount":10,"page":page},function(err,result){
+        let re=[]
+        result.forEach(el => {
+            let obj={}
+            obj["id"]=el.id
+            obj["name"]=el.name
+            obj["img"]=el.img
+            obj["tags"]=el.tags
+            obj["describe"]=el.describe
+            obj["uid"]=el.uid
+            obj["datetime"]=el.datetime
+            obj["workSpaceName"]=el.workSpaceName
+            re.push(obj)
+
+            });
+        res.send({total:result.length,data:re})
+        })
+
+    })
+   
 
 }

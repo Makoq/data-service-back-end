@@ -78,7 +78,8 @@ app.get('/blocklog',router.blockLog)
 //发布数据
 app.post('/onlinedata/',router.publicData)
 app.post('/onlinedatainfo/',router.pulicDataInfo)
-
+//数据搜索
+app.get('/localfilter',router.localDataFilter)
 
 //test
 app.get('/test',router.test)

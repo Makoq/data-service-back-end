@@ -56,3 +56,5 @@ exports.viewChart = chart.viewChart;
 //发布数据
 exports.publicData=onlineData.pulicData;
 exports.pulicDataInfo=onlineData.pulicDataInfo;
+//本地数据搜索
+exports.localDataFilter=onlineData.filterLocalData;
