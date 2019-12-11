@@ -41,6 +41,8 @@ app.all('*', function (req, res, next) {
 // user
 app.post('/user/:action',router.action);
 
+// server status
+app.get('/systemStatus', router.systemStatus)
 // data source
 // 获取数据源列表
 app.get('/dataSource', router.getDataSource);
@@ -51,7 +53,7 @@ app.get('/dataCount', router.getDataSourceCount);
 app.get('/udxSchemaInfo',router.udxSchemaInfo)
 app.get('/soloudxschema',router.soloudxschema)
 app.post('/updateschema',router.updateschema)
- 
+
 //workspace  soloworkspace
 app.post('/workspace',router.createWorkspace)
 app.get('/delworkspace',router.delworkspace)
@@ -87,14 +89,16 @@ app.get('/testChart',router.testChart)
 app.get('/chart/view/:id',router.viewChart)
 
 // 可视化
-app.get('/chart', router.getCharts); 
-app.get('/chart/:id', router.getChart); 
-app.delete('/chart/:id', router.deleteChart); 
+app.get('/chart', router.getCharts);
+app.get('/chart/:id', router.getChart);
+app.delete('/chart/:id', router.deleteChart);
 
-app.post('/chart', router.createChart); 
+app.post('/chart', router.createChart);
 // 复制一个chart
 app.post('/chart/import/:id',router.copyChart);
-app.put('/chart/:id', router.updateChart); 
+app.put('/chart/:id', router.updateChart);
+
+
 
 app.listen(8897);
 

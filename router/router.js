@@ -6,6 +6,10 @@ var dataSource = require('./dataSourceRouter');
 var chart = require('./chartRouter');
 
 const onlineData=require('./onlineData')
+
+var systemRouter = require('./systemStateRouter')
+// systemStatus
+exports.systemStatus = systemRouter.systemStatus;
 //user
 exports.action = user.action;
 
