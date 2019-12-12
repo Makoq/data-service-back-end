@@ -6,8 +6,9 @@ var dataSource = require('./dataSourceRouter');
 var chart = require('./chartRouter');
 
 const onlineData=require('./onlineData')
+const template=require('./dataTemplate')
 
-var systemRouter = require('./systemStateRouter')
+const systemRouter = require('./systemStateRouter')
 // systemStatus
 exports.systemStatus = systemRouter.systemStatus;
 //user
@@ -62,3 +63,8 @@ exports.publicData=onlineData.pulicData;
 exports.pulicDataInfo=onlineData.pulicDataInfo;
 //本地数据搜索
 exports.localDataFilter=onlineData.filterLocalData;
+
+//数据模板
+exports.datatemplate=template.createDataTemplate;
+exports.templatelist=template.templateList;
+exports.temCont=template.temCont;

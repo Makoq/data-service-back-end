@@ -92,7 +92,7 @@ exports.uploadUdxSource = function (req, res, next) {
       })
       var datetime = sd.format(new Date(), 'YYYY-MM-DD HH:mm');
 
-      db.insertOne("udx_source", { id: id, name: fields.name, img:fields.img,tags: fields.tags, describe: fields.desc, username: fields.username, uid: fields.uid, datetime: datetime, workspace: fields.workspace, workSpaceName: fields.workSpaceName, localPath: fields.localpath, share: '-1', delete: '-1' }
+      db.insertOne("udx_source", { id: id, name: fields.name, img:fields.img,tags: fields.tags, describe: fields.desc,dataTemplate:fields.dataTemplate, username: fields.username, uid: fields.uid, datetime: datetime, workspace: fields.workspace, workSpaceName: fields.workSpaceName, localPath: fields.localpath,dataTemplate:fields.dataTemplate, share: '-1', delete: '-1' }
         , function (err3, result3) {
           if (err3) {
             console.log(err3);
@@ -316,7 +316,7 @@ exports.updateschema=function(req,res,next){
       
       if(result3[0].id===fields.originalWS){
         //当不切换工作空间时
-        db.updateMany('udx_source',{id:fields.id},{$set:{name:fields.name,tags:fields.tags,img:fields.img,describe:fields.desc,datetime:datetime,localPath:fields.localpath}},function(err2,result3){
+        db.updateMany('udx_source',{id:fields.id},{$set:{name:fields.name,tags:fields.tags,img:fields.img,describe:fields.desc,dataTemplate:fields.dataTemplate,datetime:datetime,localPath:fields.localpath}},function(err2,result3){
           if(err2){
             console.log(err2)
           }
@@ -338,7 +338,7 @@ exports.updateschema=function(req,res,next){
             if(err3){
               console.log(err3)
             }
-            db.updateMany('udx_source',{id:fields.id},{$set:{name:fields.name,tags:fields.tags,describe:fields.desc,datetime:datetime,localPath:fields.localpath,workSpaceName:fields.workSpaceName,workspace:fields.workspace}},function(err2,result3){
+            db.updateMany('udx_source',{id:fields.id},{$set:{name:fields.name,tags:fields.tags,describe:fields.desc,dataTemplate:fields.dataTemplate,datetime:datetime,localPath:fields.localpath,workSpaceName:fields.workSpaceName,workspace:fields.workspace}},function(err2,result3){
               if(err2){
                 console.log(err2)
               }

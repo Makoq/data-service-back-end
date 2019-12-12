@@ -1,3 +1,6 @@
 node_modules
 .vscode
 data_dir/
+upload/
+process_dir/
+template_dir/
