@@ -84,6 +84,14 @@ app.post('/onlinedatainfo/',router.pulicDataInfo)
 //数据搜索
 app.get('/localfilter',router.localDataFilter)
 
+//数据模板创建
+app.post('/datatemplate',router.datatemplate)
+//模板列表
+app.get('/templatelist',router.templatelist)
+//模板内容
+app.get('/temcont',router.temCont)
+
+
 //test
 app.get('/test',router.test)
 app.get('/testChart',router.testChart)

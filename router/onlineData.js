@@ -91,6 +91,9 @@ exports.filterLocalData=function(req,res,next){
             obj["uid"]=el.uid
             obj["datetime"]=el.datetime
             obj["workSpaceName"]=el.workSpaceName
+            obj["dataTemplate"]=el.dataTemplate
+
+
             re.push(obj)
 
             });
