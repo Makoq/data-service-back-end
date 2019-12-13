@@ -43,6 +43,7 @@ app.post('/user/:action',router.action);
 
 // server status
 app.get('/systemStatus', router.systemStatus)
+app.get('/systemInfo', router.systemInfo)
 // data source
 // 获取数据源列表
 app.get('/dataSource', router.getDataSource);

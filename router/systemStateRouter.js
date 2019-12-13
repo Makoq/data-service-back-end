@@ -14,3 +14,17 @@ exports.systemStatus =  function (req, res) {
         });
     });
 };
+exports.systemInfo = function (req, res) {
+    const tmpdir = os.tmpdir();
+    const hostname = os.hostname();
+    const release = os.release();
+    const osType = os.type();
+    const totalMem  = (os.totalmem()/1024/1024/1024).toFixed(4);
+    res.send({
+        tmpdir,
+        hostname,
+        release,
+        osType,
+        totalMem
+    });
+}

@@ -10,6 +10,8 @@ const onlineData=require('./onlineData')
 var systemRouter = require('./systemStateRouter')
 // systemStatus
 exports.systemStatus = systemRouter.systemStatus;
+exports.systemInfo = systemRouter.systemInfo;
+
 //user
 exports.action = user.action;
 

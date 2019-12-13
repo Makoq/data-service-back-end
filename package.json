@@ -23,7 +23,7 @@
     "node-fetch": "^2.6.0",
     "node-uuid": "^1.4.8",
     "nodemailer": "^4.0.1",
-    "nodemon": "^1.19.1",
+    "nodemon": "^1.19.4",
     "os": "^0.1.1",
     "request": "^2.88.0",
     "silly-datetime": "^0.1.2",
